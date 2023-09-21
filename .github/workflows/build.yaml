@@ -19,7 +19,6 @@ jobs:
           host: "linux"
           target: "desktop"
           arch: "gcc_64"
-          # dir: "${{github.workspace}}/qt/"
           install-deps: "true"
 
       - name: List files in Qt
@@ -32,3 +31,9 @@ jobs:
 
       - name: Build
         run: cmake --build '${{github.workspace}}'/build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
