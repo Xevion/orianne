@@ -1,42 +1,34 @@
-// Copyright (C) 2016 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-
-//! [0]
 #include <QtUiTools>
-//! [0]
-
-#include <QApplication>
-#include <QLabel>
-#include <QSpinBox>
-#include <QVBoxLayout>
-
+#include <QCoreApplication>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QVBoxLayout>
 #include <QFile>
-
 #include <memory>
 
 using namespace Qt::StringLiterals;
 
-//! [1]
 static QWidget *loadCalculatorForm(QWidget *parent = nullptr)
 {
-    QUiLoader loader;
-
     QFile file(u":/forms/calculatorform.ui"_s);
     if (!file.open(QFile::ReadOnly))
         return nullptr;
+
+    QUiLoader loader;
     QWidget *formWidget = loader.load(&file, parent);
+
     file.close();
     if (formWidget == nullptr)
         return nullptr;
-//! [1]
 
-//! [2]
-    auto *inputSpinBox1 = formWidget->findChild<QSpinBox*>(u"inputSpinBox1"_s);
-    auto *inputSpinBox2 = formWidget->findChild<QSpinBox*>(u"inputSpinBox2"_s);
-    auto *outputWidget = formWidget->findChild<QLabel*>(u"outputWidget"_s);
-//! [2]
+    //! [2]
+    auto *inputSpinBox1 = formWidget->findChild<QSpinBox *>(u"inputSpinBox1"_s);
+    auto *inputSpinBox2 = formWidget->findChild<QSpinBox *>(u"inputSpinBox2"_s);
+    auto *outputWidget = formWidget->findChild<QLabel *>(u"outputWidget"_s);
+    //! [2]
 
-//! [3]
+    //! [3]
     auto updateResult = [inputSpinBox1, inputSpinBox2, outputWidget]()
     {
         const int sum = inputSpinBox1->value() + inputSpinBox2->value();
@@ -44,7 +36,7 @@ static QWidget *loadCalculatorForm(QWidget *parent = nullptr)
     };
     QObject::connect(inputSpinBox1, &QSpinBox::valueChanged, formWidget, updateResult);
     QObject::connect(inputSpinBox2, &QSpinBox::valueChanged, formWidget, updateResult);
-//! [3]
+    //! [3]
 
     return formWidget;
 }
