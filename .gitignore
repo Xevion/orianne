@@ -4,6 +4,7 @@
 .qt/
 .rcc/
 calculatorbuilder_autogen/
+build/
 
 ### C++ ###
 # Prerequisites

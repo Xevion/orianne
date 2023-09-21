@@ -1,6 +1,3 @@
-# Copyright (C) 2022 The Qt Company Ltd.
-# SPDX-License-Identifier: BSD-3-Clause
-
 cmake_minimum_required(VERSION 3.16)
 project(calculatorbuilder LANGUAGES CXX)
 
@@ -31,18 +28,11 @@ target_link_libraries(calculatorbuilder PUBLIC
 )
 #! [0]
 
-# Resources:
-#! [1]x
-set(calculatorbuilder_resource_files
-    "calculatorform.ui"
-)
-#! [1]
-
 qt6_add_resources(calculatorbuilder "calculatorbuilder"
     PREFIX
         "/forms"
     FILES
-        ${calculatorbuilder_resource_files}
+        "calculatorform.ui"
 )
 
 install(TARGETS calculatorbuilder
