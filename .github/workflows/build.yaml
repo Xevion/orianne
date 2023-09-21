@@ -10,17 +10,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        shell: msys2 {0}
 
     steps:
-      - uses: msys2/setup-msys2@v3
-        with:
-          install: mingw-w64-x86_64-toolchain
-          msystem: mingw64
-          release: false
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
