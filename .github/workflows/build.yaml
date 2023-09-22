@@ -41,8 +41,8 @@ jobs:
 
       - name: Download dependencies
         run: |
-          sudo apt update
-          sudo apt install libxcb-cursor0
+          sudo apt-get update
+          sudo apt-get install libxcb-cursor0
 
       - name: Package artifacts with linuxdeployqt
         run: |
@@ -56,5 +56,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: build
-          path: build
+          name: testtaker-linux-appimage
+          path: TestTaker*.AppImage
