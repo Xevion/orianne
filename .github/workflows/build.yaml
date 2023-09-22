@@ -32,6 +32,20 @@ jobs:
       - name: Build
         run: cmake --build '${{github.workspace}}'/build
 
+      - name: Download linuxdeployqt
+        run: |
+          wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+
+      - name: Package artifacts with linuxdeployqt
+        run: |
+          mkdir -p appdir/usr/bin/
+          mv ./calculatorbuilder appdir/usr/bin/
+          export VERSION=${0.0.1}-linux # linuxdeployqt uses this for naming the package
+          echo "Version is: ${VERSION}"
+          ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
+            -appimage -verbose=2 -extra-plugins=iconengines
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
