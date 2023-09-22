@@ -41,7 +41,7 @@ jobs:
         run: |
           mkdir -p appdir/usr/bin/
           mv ./build/calculatorbuilder appdir/usr/bin/
-          export VERSION=${0.0.1}-linux # linuxdeployqt uses this for naming the package
+          export VERSION=0.0.1-linux # linuxdeployqt uses this for naming the package
           echo "Version is: ${VERSION}"
           ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
             -appimage -verbose=2 -extra-plugins=iconengines
