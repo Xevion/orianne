@@ -3,9 +3,9 @@
 # qt
 .qt/
 .rcc/
-calculatorbuilder_autogen/
+testtaker_autogen/
 build/
-calculatorbuilder
+testtaker
 
 ### C++ ###
 # Prerequisites
