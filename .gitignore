@@ -5,6 +5,7 @@
 .rcc/
 calculatorbuilder_autogen/
 build/
+calculatorbuilder
 
 ### C++ ###
 # Prerequisites
