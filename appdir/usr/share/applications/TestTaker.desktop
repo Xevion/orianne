@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=TestTaker
+Comment=Hello, World!
+Exec=TestTaker
+Icon=
+Categories=Education;Utility;
