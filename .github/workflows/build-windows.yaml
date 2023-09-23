@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -B '${{github.workspace}}'/build
-          cmake --build .
+          cmake --build '${{github.workspace}}'/build
 
       - name: Package Executables with windeployqt
         shell: bash
