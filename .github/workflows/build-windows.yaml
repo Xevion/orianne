@@ -46,7 +46,7 @@ jobs:
 
           mkdir packageDir
           pushd packageDir
-          mv ../TestTaker.exe .
+          mv '${{github.workspace}}'/build/TestTaker.exe .
 
           windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations TestTaker.exe
           7z a -r ../${APPNAME} *
