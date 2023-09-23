@@ -10,7 +10,7 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-20.04
 
     steps:
@@ -58,3 +58,50 @@ jobs:
         with:
           name: testtaker-linux-appimage
           path: TestTaker*.AppImage
+
+  windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Setup Microsoft Visual C++
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: "6.5.2"
+          host: "windows"
+          target: "desktop"
+          arch: "win64_msvc2019_64"
+          install-deps: "true"
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build for Windows
+        shell: bash
+        run: |
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -B '${{github.workspace}}'/build
+          cmake --build '${{github.workspace}}'/build
+
+      - name: Package Executables with windeployqt
+        shell: bash
+        run: |
+          VERSION=0.0.1-win
+          APPNAME=TestTaker-${VERSION}-win-x86_64.zip
+          echo "APPNAME=${APPNAME}" >> $GITHUB_ENV
+
+          mkdir packageDir
+          pushd packageDir
+          mv '${{github.workspace}}'/build/TestTaker.exe .
+
+          windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations TestTaker.exe
+          7z a -r ../${APPNAME} *
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: testtaker-windows
+          path: ${{ env.APPNAME }}
