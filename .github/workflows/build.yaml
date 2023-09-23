@@ -47,7 +47,7 @@ jobs:
       - name: Package artifacts with linuxdeployqt
         run: |
           mkdir -p appdir/usr/bin/
-          mv ./build/testtaker appdir/usr/bin/
+          mv ./build/TestTaker appdir/usr/bin/
           export VERSION=0.0.1-linux # linuxdeployqt uses this for naming the package
           echo "Version is: ${VERSION}"
           ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
@@ -56,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: testtaker-linux-appimage
+          name: TestTaker-linux-appimage
           path: TestTaker*.AppImage
 
   windows:
@@ -99,9 +99,9 @@ jobs:
           mv '${{github.workspace}}'/build/TestTaker.exe .
 
           windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations TestTaker.exe
-          7z a -r ../${APPNAME} *
+          # 7z a -r ../${APPNAME} *
 
       - uses: actions/upload-artifact@v2
         with:
-          name: testtaker-windows
-          path: ${{ env.APPNAME }}
+          name: TestTaker-windows
+          path: packageDir/*
