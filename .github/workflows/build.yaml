@@ -23,10 +23,8 @@ jobs:
           arch: "gcc_64"
           install-deps: "true"
 
-      - name: List files in Qt
-        run: find ${{env.Qt5_Dir}}
-
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Configure CMake
         run: cmake -B '${{github.workspace}}'/build

@@ -6,6 +6,20 @@ Feature Targets:
 - Cross platform (Windows, Linux, Mac)
 - Automatic build scripts with Workflows
 
+## Concerns
+
+- Testing on VDI
+    - It's important that these builds are fully compatible on the VDI machines (Windows, no admin privileges).
+    - Potential for integration testing on VDI-like machines?
+- MacOS ARM/Intel support
+    - ARM machines are notorious for not supporting lots of software, but many students have Macs. Testing on both architectures is important.
+- Release/Debug builds
+    - It would be good to have debug builds availble for testing.
+- Runtime & Build-time Version
+    - Version, environment type & target information is important to have available at both runtime & build time.
+    - Builds must have artifacts that contain this information automatically.
+    - Commit hash, build date, build type, target platform, etc.
+
 ## VS Code
 
 - Requirements
