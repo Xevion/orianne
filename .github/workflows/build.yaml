@@ -26,7 +26,7 @@ jobs:
       - name: List files in Qt
         run: find ${{env.Qt5_Dir}}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Configure CMake
         run: cmake -B '${{github.workspace}}'/build
@@ -54,7 +54,7 @@ jobs:
             -appimage -verbose=2 -extra-plugins=iconengines
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: TestTaker-linux-appimage
           path: TestTaker*.AppImage
@@ -79,7 +79,7 @@ jobs:
           install-deps: "true"
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build for Windows
         shell: bash
@@ -101,7 +101,7 @@ jobs:
           windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations TestTaker.exe
           # 7z a -r ../${APPNAME} *
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: TestTaker-windows
           path: packageDir/*
