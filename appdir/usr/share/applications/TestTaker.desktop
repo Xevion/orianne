@@ -2,6 +2,6 @@
 Type=Application
 Name=TestTaker
 Comment=Hello, World!
-Exec=testtaker
+Exec=TestTaker
 Icon=testtaker
 Categories=Education;Utility;
