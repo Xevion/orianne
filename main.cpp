@@ -11,7 +11,7 @@ using namespace Qt::StringLiterals;
 
 static QWidget *loadCalculatorForm(QWidget *parent = nullptr)
 {
-    QFile file(u":/forms/calculatorform.ui"_s);
+    QFile file(u":/forms/form.ui"_s);
     if (!file.open(QFile::ReadOnly))
         return nullptr;
 
