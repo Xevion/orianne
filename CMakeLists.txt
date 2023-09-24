@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui UiTools Widgets)
 
-qt_add_executable(TestTaker main.cpp)
+qt_add_executable(TestTaker src/main.cpp)
 
 set_target_properties(TestTaker PROPERTIES
     WIN32_EXECUTABLE TRUE  # Required for GUI executables
@@ -24,7 +24,7 @@ qt6_add_resources(TestTaker "TestTaker"
     PREFIX
         "/forms"
     FILES
-        "form.ui"
+        "src/form.ui"
 )
 
 install(TARGETS TestTaker
