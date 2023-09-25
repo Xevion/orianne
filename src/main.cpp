@@ -1,11 +1,15 @@
 #include <QtUiTools>
+#include <QApplication>
 #include <QCoreApplication>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QPushButton>
+#include <QTranslator>
 #include <QFile>
 #include <memory>
+#include "FlowLayout.h"
 
 using namespace Qt::StringLiterals;
 
@@ -44,16 +48,26 @@ static QWidget *loadCalculatorForm(QWidget *parent = nullptr)
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QWidget w;
-    auto *formWidget = loadCalculatorForm(&w);
-    if (formWidget == nullptr)
-        return -1;
+    QWidget widget;
+    
+    // auto *formWidget = loadCalculatorForm(&widget);
+    // if (formWidget == nullptr)
+        // return -1;
     //! [4]
-    auto *layout = new QVBoxLayout(&w);
-    layout->addWidget(formWidget);
-    w.setWindowTitle(QCoreApplication::translate("CalculatorForm",
+    // auto *layout = new QVBoxLayout(&widget);
+    // layout->addWidget(formWidget);
+
+    FlowLayout *flowLayout = new FlowLayout;
+    flowLayout->addWidget(new QPushButton(QPushButton::tr("Short")));
+    flowLayout->addWidget(new QPushButton(QPushButton::tr("Longer")));
+    flowLayout->addWidget(new QPushButton(QPushButton::tr("Different text")));
+    flowLayout->addWidget(new QPushButton(QPushButton::tr("More text")));
+    flowLayout->addWidget(new QPushButton(QPushButton::tr("Even longer button text")));
+    widget.setLayout(flowLayout);
+
+    widget.setWindowTitle(QCoreApplication::translate("CalculatorForm",
                                                  "Calculator Builder"));
     //! [4]
-    w.show();
+    widget.show();
     return app.exec();
 }
