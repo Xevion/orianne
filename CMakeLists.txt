@@ -6,7 +6,12 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui UiTools Widgets)
 
-qt_add_executable(TestTaker src/main.cpp)
+file(GLOB testtaker_SRC
+     "src/*.h"
+     "src/*.cpp"
+)
+
+qt_add_executable(TestTaker ${testtaker_SRC})
 
 set_target_properties(TestTaker PROPERTIES
     WIN32_EXECUTABLE TRUE  # Required for GUI executables
