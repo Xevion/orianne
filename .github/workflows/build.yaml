@@ -46,7 +46,7 @@ jobs:
       - name: Package artifacts with linuxdeployqt
         run: |
           mkdir -p appdir/usr/bin/
-          mv ./build/TestTaker appdir/usr/bin/
+          mv ./build/Orianne appdir/usr/bin/
           export VERSION=0.0.1-linux # linuxdeployqt uses this for naming the package
           echo "Version is: ${VERSION}"
           ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
@@ -55,8 +55,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: TestTaker-linux-appimage
-          path: TestTaker*.AppImage
+          name: Orianne-linux-appimage
+          path: Orianne*.AppImage
 
   windows:
     runs-on: windows-latest
@@ -91,17 +91,17 @@ jobs:
         shell: bash
         run: |
           VERSION=0.0.1-win
-          APPNAME=TestTaker-${VERSION}-win-x86_64.zip
+          APPNAME=Orianne-${VERSION}-win-x86_64.zip
           echo "APPNAME=${APPNAME}" >> $GITHUB_ENV
 
           mkdir packageDir
           pushd packageDir
-          mv '${{github.workspace}}'/build/TestTaker.exe .
+          mv '${{github.workspace}}'/build/Orianne.exe .
 
-          windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations TestTaker.exe
+          windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations Orianne.exe
           # 7z a -r ../${APPNAME} *
 
       - uses: actions/upload-artifact@v3
         with:
-          name: TestTaker-windows
+          name: Orianne-windows
           path: packageDir/*

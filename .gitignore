@@ -3,9 +3,9 @@
 # qt
 .qt/
 .rcc/
-testtaker_autogen/
+orianne_autogen/
 build/
-testtaker
+orianne
 
 ### C++ ###
 # Prerequisites

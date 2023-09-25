@@ -1,10 +1,16 @@
-# test-taker
+# Orianne
 
 A Qt6 application for administering tests. Highly experimental.
 
 Feature Targets:
 - Cross platform (Windows, Linux, Mac)
 - Automatic build scripts with Workflows
+- Multilingual support (English, Spanish)
+    - UI support would be straightforward, but the test content could not be translated easily.
+- Commandline Options
+    - `--test <test_file>`: Open a test file on startup
+    - `--lang <language>`: Set the language on startup
+- Profile
 
 ## Concerns
 
