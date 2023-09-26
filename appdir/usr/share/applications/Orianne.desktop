@@ -2,6 +2,6 @@
 Type=Application
 Name=Orianne
 Comment=Hello, World!
-Exec=Oriannes
+Exec=Orianne
 Icon=orianne
 Categories=Education;Utility;
