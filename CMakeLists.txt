@@ -69,6 +69,14 @@ qt_add_executable(Orianne ${orianne_SRC})
 
 target_include_directories(Orianne PRIVATE "${CMAKE_BINARY_DIR}/generated")
 
+# Precompiling the Qt headers cuts a meaningful chunk off clean-build time;
+# FlowLayout.cpp/main.cpp both drag in most of QtWidgets already.
+target_precompile_headers(Orianne PRIVATE
+    <QtWidgets/QApplication>
+    <QtWidgets/QWidget>
+    <QtCore/QString>
+)
+
 set_target_properties(Orianne PROPERTIES
     WIN32_EXECUTABLE TRUE  # Required for GUI executables
     MACOSX_BUNDLE TRUE  # Required for GUI executables to be launchable from Finder
