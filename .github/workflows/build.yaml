@@ -99,9 +99,10 @@ jobs:
           mv '${{github.workspace}}'/build/Orianne.exe .
 
           windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations Orianne.exe
-          # 7z a -r ../${APPNAME} *
+          7z a -r ../${APPNAME} *
+          popd
 
       - uses: actions/upload-artifact@v3
         with:
           name: Orianne-windows
-          path: packageDir/*
+          path: ${{ env.APPNAME }}
