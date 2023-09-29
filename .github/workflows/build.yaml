@@ -33,8 +33,17 @@ jobs:
           key: linux-qt6.5.2
           max-size: 500M
 
+      - name: Install mold
+        uses: rui314/setup-mold@v1
+        with:
+          mold-version: "2.2.0"
+          make-default: false
+
       - name: Configure CMake
-        run: cmake -B '${{github.workspace}}'/build -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        run: |
+          cmake -B '${{github.workspace}}'/build \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=mold
 
       - name: Build
         run: cmake --build '${{github.workspace}}'/build
