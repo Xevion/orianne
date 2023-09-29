@@ -27,8 +27,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Cache ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: linux-qt6.5.2
+          max-size: 500M
+
       - name: Configure CMake
-        run: cmake -B '${{github.workspace}}'/build
+        run: cmake -B '${{github.workspace}}'/build -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build
         run: cmake --build '${{github.workspace}}'/build
@@ -81,10 +87,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Cache ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: windows-qt6.5.2
+          max-size: 500M
+          variant: sccache
+
       - name: Build for Windows
         shell: bash
         run: |
-          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -B '${{github.workspace}}'/build
+          cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl \
+            -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
+            -B '${{github.workspace}}'/build
           cmake --build '${{github.workspace}}'/build
 
       - name: Package Executables with windeployqt
