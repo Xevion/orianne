@@ -130,3 +130,53 @@ jobs:
         with:
           name: Orianne-windows
           path: ${{ env.APPNAME }}
+
+  macos:
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: "6.5.2"
+          host: "mac"
+          target: "desktop"
+          install-deps: "true"
+          cache: "true"
+
+      - name: Cache ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: macos-qt6.5.2
+          max-size: 500M
+
+      - name: Configure CMake (universal binary)
+        run: |
+          cmake -B '${{github.workspace}}'/build \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
+      - name: Build
+        run: cmake --build '${{github.workspace}}'/build
+
+      - name: Verify universal binary
+        run: |
+          BIN='${{github.workspace}}'/build/Orianne.app/Contents/MacOS/Orianne
+          lipo -info "$BIN"
+          lipo -archs "$BIN" | grep -q x86_64
+          lipo -archs "$BIN" | grep -q arm64
+
+      - name: Package
+        run: |
+          VERSION=0.0.1-macos
+          APPNAME=Orianne-${VERSION}.zip
+          echo "APPNAME=${APPNAME}" >> "$GITHUB_ENV"
+          ditto -c -k --sequesterRsrc --keepParent '${{github.workspace}}'/build/Orianne.app "${APPNAME}"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Orianne-macos
+          path: ${{ env.APPNAME }}
