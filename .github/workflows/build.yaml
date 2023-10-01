@@ -180,3 +180,45 @@ jobs:
         with:
           name: Orianne-macos
           path: ${{ env.APPNAME }}
+
+  windows-smoke-test:
+    needs: windows
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: Orianne-windows
+          path: winbuild
+
+      - name: Install Wine & screenshot tooling
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y wine wine32 xvfb imagemagick
+
+      - name: Unpack build
+        run: |
+          cd winbuild
+          unzip -o *.zip -d unpacked
+
+      - name: Launch under Wine and screenshot
+        run: |
+          xvfb-run -a -s "-screen 0 1024x768x24" bash -c '
+            set -e
+            export WINEDLLOVERRIDES="mscoree,mshtml="
+            export WINEDEBUG=-all
+            wine winbuild/unpacked/Orianne.exe &
+            WINE_PID=$!
+            sleep 20
+            import -window root wine-screenshot.png
+            kill $WINE_PID || true
+          '
+
+      - name: Upload screenshot
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: wine-smoke-test-screenshot
+          path: wine-screenshot.png
