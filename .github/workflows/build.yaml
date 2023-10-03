@@ -27,6 +27,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Resolve version metadata
+        id: version
+        run: echo "hash=$(git rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
@@ -46,7 +50,10 @@ jobs:
             -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=mold
 
       - name: Build
-        run: cmake --build '${{github.workspace}}'/build
+        run: |
+          BUILD_START=$(date +%s)
+          cmake --build '${{github.workspace}}'/build
+          echo "BUILD_SECONDS=$(( $(date +%s) - BUILD_START ))" >> "$GITHUB_ENV"
 
       - name: Download linuxdeployqt
         run: |
@@ -62,10 +69,24 @@ jobs:
         run: |
           mkdir -p appdir/usr/bin/
           mv ./build/Orianne appdir/usr/bin/
-          export VERSION=0.0.1-linux # linuxdeployqt uses this for naming the package
+          export VERSION=0.0.1-${{ steps.version.outputs.hash }}-linux # linuxdeployqt uses this for naming the package
           echo "Version is: ${VERSION}"
           ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/*.desktop \
             -appimage -verbose=2 -extra-plugins=iconengines
+
+      - name: Build summary
+        if: always()
+        run: |
+          {
+            echo "### Linux build"
+            echo ""
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Commit | \`${{ steps.version.outputs.hash }}\` |"
+            echo "| Build time | ${BUILD_SECONDS}s |"
+            echo "| Linker | mold 2.2.0 |"
+            echo "| \`ccache\` hit rate | $(ccache -s | grep -m1 'Hits:' | awk '{print $NF}') |"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -96,6 +117,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Resolve version metadata
+        id: version
+        shell: bash
+        run: echo "hash=$(git rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
@@ -106,16 +132,18 @@ jobs:
       - name: Build for Windows
         shell: bash
         run: |
+          BUILD_START=$(date +%s)
           cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl \
             -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
             -B '${{github.workspace}}'/build
           cmake --build '${{github.workspace}}'/build
+          echo "BUILD_SECONDS=$(( $(date +%s) - BUILD_START ))" >> "$GITHUB_ENV"
 
       - name: Package Executables with windeployqt
         shell: bash
         run: |
-          VERSION=0.0.1-win
-          APPNAME=Orianne-${VERSION}-win-x86_64.zip
+          VERSION=0.0.1-${{ steps.version.outputs.hash }}-win
+          APPNAME=Orianne-${VERSION}.zip
           echo "APPNAME=${APPNAME}" >> $GITHUB_ENV
 
           mkdir packageDir
@@ -125,6 +153,21 @@ jobs:
           windeployqt.exe -svg --release --no-compiler-runtime --no-opengl-sw --no-translations Orianne.exe
           7z a -r ../${APPNAME} *
           popd
+
+      - name: Build summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### Windows build"
+            echo ""
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Commit | \`${{ steps.version.outputs.hash }}\` |"
+            echo "| Build time | ${BUILD_SECONDS}s |"
+            echo "| Compiler cache | sccache |"
+            echo "| Archive | ${APPNAME} |"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@v3
         with:
@@ -147,6 +190,10 @@ jobs:
           install-deps: "true"
           cache: "true"
 
+      - name: Resolve version metadata
+        id: version
+        run: echo "hash=$(git rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
@@ -160,7 +207,10 @@ jobs:
             -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
       - name: Build
-        run: cmake --build '${{github.workspace}}'/build
+        run: |
+          BUILD_START=$(date +%s)
+          cmake --build '${{github.workspace}}'/build
+          echo "BUILD_SECONDS=$(( $(date +%s) - BUILD_START ))" >> "$GITHUB_ENV"
 
       - name: Verify universal binary
         run: |
@@ -171,10 +221,24 @@ jobs:
 
       - name: Package
         run: |
-          VERSION=0.0.1-macos
+          VERSION=0.0.1-${{ steps.version.outputs.hash }}-macos
           APPNAME=Orianne-${VERSION}.zip
           echo "APPNAME=${APPNAME}" >> "$GITHUB_ENV"
           ditto -c -k --sequesterRsrc --keepParent '${{github.workspace}}'/build/Orianne.app "${APPNAME}"
+
+      - name: Build summary
+        if: always()
+        run: |
+          {
+            echo "### macOS build"
+            echo ""
+            echo "| Metric | Value |"
+            echo "|---|---|"
+            echo "| Commit | \`${{ steps.version.outputs.hash }}\` |"
+            echo "| Build time | ${BUILD_SECONDS}s |"
+            echo "| Architectures | arm64, x86_64 (universal) |"
+            echo "| Archive | ${APPNAME} |"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@v3
         with:
