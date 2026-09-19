@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [master]
+    branches: [master, "ci-spike/**"]
   pull_request:
     branches: [master]
 
@@ -25,7 +25,7 @@ jobs:
           cache: "true"
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Resolve version metadata
         id: version
@@ -89,7 +89,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Orianne-linux-appimage
           path: Orianne*.AppImage
@@ -115,7 +115,7 @@ jobs:
           cache: "true"
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Resolve version metadata
         id: version
@@ -169,7 +169,7 @@ jobs:
             echo "| Archive | ${APPNAME} |"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Orianne-windows
           path: ${{ env.APPNAME }}
@@ -179,7 +179,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -240,7 +240,7 @@ jobs:
             echo "| Archive | ${APPNAME} |"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Orianne-macos
           path: ${{ env.APPNAME }}
@@ -251,7 +251,7 @@ jobs:
 
     steps:
       - name: Download Windows artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: Orianne-windows
           path: winbuild
@@ -282,7 +282,7 @@ jobs:
 
       - name: Upload screenshot
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wine-smoke-test-screenshot
           path: wine-screenshot.png
