@@ -11,7 +11,7 @@ env:
 
 jobs:
   linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Install Qt
@@ -247,7 +247,7 @@ jobs:
 
   windows-smoke-test:
     needs: windows
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Download Windows artifact
