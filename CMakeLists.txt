@@ -96,6 +96,10 @@ qt6_add_resources(Orianne "Orianne"
         "src/form.ui"
 )
 
+if(NOT INSTALL_EXAMPLEDIR)
+    set(INSTALL_EXAMPLEDIR "bin")
+endif()
+
 install(TARGETS Orianne
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
