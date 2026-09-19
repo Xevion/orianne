@@ -272,12 +272,17 @@ jobs:
           xvfb-run -a -s "-screen 0 1024x768x24" bash -c '
             set -e
             export WINEDLLOVERRIDES="mscoree,mshtml="
-            export WINEDEBUG=-all
+            export WINEDEBUG=-all,+err
             wine winbuild/unpacked/Orianne.exe &
             WINE_PID=$!
             sleep 20
+            if kill -0 $WINE_PID 2>/dev/null; then
+              echo "Orianne.exe still running after 20s"
+            else
+              echo "Orianne.exe exited before the screenshot"
+            fi
             import -window root wine-screenshot.png
-            kill $WINE_PID || true
+            kill $WINE_PID 2>/dev/null || true
           '
 
       - name: Upload screenshot
