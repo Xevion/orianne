@@ -95,7 +95,7 @@ jobs:
           path: Orianne*.AppImage
 
   windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
       - name: Setup Microsoft Visual C++
@@ -175,7 +175,7 @@ jobs:
           path: ${{ env.APPNAME }}
 
   macos:
-    runs-on: macos-13
+    runs-on: macos-14
 
     steps:
       - name: Checkout repository
